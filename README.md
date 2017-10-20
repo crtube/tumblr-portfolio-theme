@@ -13,12 +13,15 @@ Add a new page called /about. Use standard layout and add content to the page!
 There are some specific classes that you can reuse in the /about page. 
 
 Creating a split view: 
+~~~~
 <div class="resume">
 <h3>Experience</h3>
 <ul><li><strong>Title<br /></strong><em>Dates<br /></em>Detail</li></ul>
 </div>
+~~~~
 
 Adding a 'download' button:  
+~~~~
 <p class="download"><a href="#" target="_blank">Download resume</a></p>
-
+~~~~
 
