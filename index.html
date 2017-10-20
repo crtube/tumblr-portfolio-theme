@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {block:IndexPage}
+    <title>{Title}</title>
+    {/block:IndexPage}
+    {block:PermalinkPage}
+    <title>{Title}{block:PostTitle} - {PostTitle}{/block:PostTitle}</title>
+    {/block:PermalinkPage}
+    <link rel="shortcut icon" href="{block:ifCustomFavicon}{image:Favicon}{/block:ifCustomFavicon}{block:ifNotCustomFavicon}{Favicon}{/block:ifNotCustomFavicon}">
+    <link rel="alternate" type="application/rss+xml" href="{RSS}"> 
+    {block:Description}
+    <meta name="description" content="{MetaDescription}" /> 
+    {/block:Description}
+    <meta name="keywords" content="{text:Keywords}" />
+
+    <!-- for tumblr content -->
+    <meta name="if:Custom Favicon" content="0" />
+    <meta name="image:Favicon" content="" />
+    <meta name="text:Keywords" content=""/>
+    <meta name="color:Text color" content="#000"/>
+    <meta name="text:Body Google Font" content='Muli'/> 
+    <meta name="text:Accent Google Font" content='Roboto Mono'/> 
+    <!-- external content -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <meta name="if:Show email" content="1" />
+    <meta name="text:Email address" content="hi@example.com"/>
+    <meta name="if:Show LinkedIn" content="0" />
+    <meta name="text:LinkedIn link" content=""/>
+    <meta name="if:Show Dribbble" content="0" />
+    <meta name="text:Dribbble link" content=""/>
+    <meta name="if:Show Behance" content="0" />
+    <meta name="text:Behance link" content=""/>
+    
+
+    <style>
+        @import url('https://fonts.googleapis.com/css?family={text:Body Google Font}');
+        @import url('https://fonts.googleapis.com/css?family={text:Accent Google Font}');
+
+        
+/* basic styling */
+        html,body {
+            width:100%;
+            font-size: 17px;
+            min-height: 100vh;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+        
+        *,
+        *:after,
+        *:before {
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: '{text:Body Google Font}';
+            font-weight: 400;
+            color: {color:Text color};
+            background: {BackgroundColor};
+        }
+        
+        section {
+            width: 100%;
+            padding: 0 0 2rem;
+            flex: 1;
+            display:flex;
+            justify-content: center;
+        }
+        
+        .wrap {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 1.5rem;
+            position: relative;
+            display: flex;
+            flex-flow: row wrap;
+            align-content: flex-start;
+            justify-content: center;
+        }
+        
+        /*typography*/
+        
+        h1, h2, h3, b{
+            color: {TitleColor};
+        } 
+        h1 {
+            font-weight: 700;
+            font-size: 2.4rem;
+            text-align: center;
+            width:100%;
+            position: relative;
+        }
+        
+        h2 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 1.25rem 0;
+            line-height: 1.6em;
+        }
+
+
+        h3 {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+        }
+        
+        a {
+            color: {color:Text color};
+            text-decoration: none;
+        }
+        
+        a:hover {
+            color: {TitleColor};
+        }
+        
+        p {
+            margin: 0 0 1rem;
+            line-height: 1.8rem;
+        }
+        
+        ul li, ol li {
+            line-height: 1.8rem;
+            margin: 0 0 0.5rem;
+        }
+        
+        ul li:last-child, ol li:last-child {
+            margin: 0 0 1rem;
+        } 
+        
+        blockquote p {
+            margin: 1.2rem 0;
+            font-size: 1.4rem;
+            line-height: 2rem;
+        }
+        
+        
+        /* navigation */
+        header {
+            position: relative;
+            display: block;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            font-family: '{text:Accent Google Font}';
+        }
+        
+        header .wrap {
+            padding: 1.5rem 0;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display:block;
+            position: relative;
+        }
+        
+        .logo:after {
+            content: '';
+            background: {color:Text color};
+            position: absolute;
+            width: 100%;
+            height: 2px;
+        }
+        
+        .logo:hover:after {
+            background: {TitleColor};
+        }
+        
+        
+        .logo p {
+            position: relative;
+            padding: 0.3rem 0;
+            font-weight: bold;
+            line-height: 1rem;
+            margin: 0;
+        }
+        .nav ul li {
+            list-style: none;
+            display: inline-block;
+            position: relative;
+            margin: 0 1.5rem 0 0;
+            line-height: 1rem;
+        }
+        .nav ul li:last-child {
+            margin: 0;
+        }
+        
+        .nav ul li:not(:first-of-type):before {
+            color: {AccentColor};
+            content: '/';
+            position: relative;
+            right: 1rem;
+            top: 0
+        }
+        
+        .nav ul li a {
+            position: relative;
+            display:inline-block;
+            padding: 0.3rem 0;
+            text-decoration: none;
+        }
+        
+        /*hero blurb */
+        
+        .hero-wrap {
+            width: 100%;
+            max-width: 850px;
+            margin: 0 2rem;
+            padding: 4rem 0 2.4rem;
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-description,
+        .hero-link {
+            opacity: 0;
+            -webkit-transform: translateY(-30px);
+            -ms-transform: translateY(-30px);
+            transform: translateY(-30px);
+            -webkit-animation-name: pageTitleAnimation;
+            animation-name: pageTitleAnimation;
+            -webkit-animation-duration: 800ms;
+            animation-duration: 800ms;
+            -webkit-animation-timing-function: cubic-bezier(0.4, 0,0.2, 1);
+            animation-timing-function: cubic-bezier(0.4, 0,0.2, 1);
+            -webkit-animation-fill-mode: forwards;
+            animation-fill-mode: forwards
+        }
+        
+        .hero-description{
+            -webkit-animation-delay: 400ms;
+            animation-delay: 400ms
+        }
+        
+        .hero-link{
+            display:inline-block;
+            position: relative;
+            font-family: '{text:Accent Google Font}';
+            padding: 0.5rem 0;
+            margin-top: 1rem;
+            -webkit-animation-delay: 500ms;
+            animation-delay: 500ms
+        }
+        
+        /* portfolio */
+        
+        .grid {
+            width: 100%;
+        }
+        
+        .grid-item {
+            display: inline-flex;
+            flex-direction: column;
+            position: relative;
+            margin: 0 0 24px;
+            box-shadow: 0 7px 7px rgba(0,0,0,0.06), 0 0 7px rgba(0,0,0,0.03);
+            border-radius: 4px;
+            padding-bottom: 1.5rem;
+            background: #fff;
+            transition: box-shadow 0.1s cubic-bezier(0.4, 0.0, 0.2, 1);
+            overflow: hidden;
+        }
+        
+        .grid-sizer,
+        .grid-item { 
+            width: calc(33.33% - 24px);
+        }
+        
+        
+        .grid-item:hover {
+            box-shadow: 0 14px 14px rgba(0,0,0,0.06), 0 0 14px rgba(0,0,0,0.03);
+        }
+        
+        h3.grid-item_title {
+            padding: 1.2rem 1.5rem 0;
+            line-height: 1.6rem;
+            margin-bottom: 1rem;
+            order: 2;
+        }
+        
+        .grid-item figure {
+            margin: 0;
+            position: relative;
+            top: 0;
+            height: 100%;
+            bottom: 0;
+            display: block;
+            order: 1;
+        }
+        
+        .grid-item p:first-of-type {
+            order: 3;
+            font-family: '{text:Accent Google Font}';
+            color: {TitleColor};
+            opacity: 0.54;
+            padding: 0 1.5rem;
+            margin: 0;
+            line-height: 1.5rem;
+        }
+        
+        .read_more_container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            left: 0;
+            bottom: 0;
+            display: flex;
+            margin: 0;
+        }
+        a.read_more {
+            flex: 1;
+            font-size: 0px;
+        }
+        
+        
+        figure img {
+            width: 100%;
+            height: auto;
+        }
+       
+        /*permalink page and blog*/
+        
+        .page figure{
+            width: calc(100% + 200px);
+            margin: 2.5rem 0 2.5rem -6.25rem;
+        }
+        
+        .page figure:first-child, .page figure:first-child + p{
+             display: none;
+        }
+        
+        .page figure.tmblr-embed.tmblr-full {
+            position: relative;
+            padding-bottom: 67.5%;
+            padding-top: 25px;
+            height: 0;
+        }
+        
+        .page figure.tmblr-embed.tmblr-full iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        
+        .page a{
+            display: inline-block;
+            position: relative;
+        }
+        
+        .page a:hover{
+            color: {AccentColor};
+        }
+        
+        .page a:after {
+            content: '';
+            position: absolute;
+            background: black;
+            height: 1px;
+            left: 0;
+            right: 0;
+            bottom: 0.2rem;
+        }
+        
+        .page a:hover:after{
+            background: {AccentColor};
+        }
+        
+        .page ul,.page ol {
+            padding: 0 0 0 2rem;
+        }
+        
+        .text-holder{
+            width: 100%;
+            max-width: 780px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        
+        /*resume*/
+        
+        p img {
+            width: 100%;
+            margin-top: 2rem;
+        }
+        
+        .resume{
+                display: flex;
+                flex-flow: row wrap;
+                margin: 2rem 0 0;
+        }
+        
+        .resume h3{
+            flex: 40%;
+        }
+        .resume ul{
+            flex: 60%;
+            padding: 0
+        }
+        .resume li {
+            list-style: none;
+            margin: 0 0 1.6rem 0;
+        }
+        
+        .resume li strong {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+        
+        .resume li em {
+            font-family: '{text:Accent Google Font}';
+            font-style: normal;
+            opacity: 0.7;
+            line-height: 2.2rem;
+        }
+        
+        p.download {
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        
+        p.download a {
+            background: #ECEFF1;
+            padding: 0.5rem 1.5rem;
+            border-radius: 4px;
+        }
+        
+        p.download a:after {
+            content:none;
+        }
+        
+        /*pagination*/
+        
+        .pagination .wrap {
+            justify-content: space-between;
+            max-width: 780px;
+        }
+        
+        .pagination a {font-weight: 700;}
+        
+        .pagination .prev {
+            flex: 1;
+            text-align: left;
+        }
+        
+        .pagination .next {
+            flex: 1;
+            text-align: right;
+        }
+        
+        
+        /* footer */
+        
+        footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+        
+        footer .wrap {
+            border-top: 1px solid rgba(0,0,0,0.1);
+            align-content: center;
+            padding: 1rem 0;
+        }
+        
+        footer a {
+            position: relative;
+            display: inline-block;
+            padding: 0.5rem 0;
+            margin: 0 1rem;
+            font-family: '{text:Accent Google Font}';
+            text-decoration: none;
+        }
+        
+        @-webkit-keyframes pageTitleAnimation {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(-30px);
+                transform: translateY(-30px)
+            }
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0);
+                transform: translateY(0)
+            }
+        }
+
+        @keyframes pageTitleAnimation {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(-30px);
+                transform: translateY(-30px)
+            }
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0);
+                transform: translateY(0)
+            }
+        }
+        
+        
+        @media screen and (max-width: 980px) {
+            .page figure {
+                width: 100%;
+                margin: 1.25rem 0;
+            }
+            
+            .page figure.tmblr-embed.tmblr-full {
+                padding-bottom: 52%;
+            }
+            
+        }
+        
+        @media screen and (max-width: 780px) {
+            .grid-sizer,
+            .grid-item { 
+                width: calc(50% - 24px);
+            }
+            html, body {
+                font-size: 16px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        
+            h2 {
+                font-size: 1.4rem;
+                margin: 1.25rem 0;
+            }
+                
+            .hero-wrap {
+                padding: 3rem 0 2rem;
+            }
+            
+            
+        }
+        
+        @media screen and (max-width: 480px) {
+            .grid-sizer,
+            .grid-item { 
+                width: 100%;
+            }
+            .thumbnail-caption h2 {
+                font-size: 1.3rem;
+            }
+            
+            .resume h3, .resume ul{
+                flex: 100%;
+            }
+            
+            html, body {
+                font-size: 15px;
+            }
+            
+            .hero-wrap {
+                padding: 1rem 0 0;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="wrap">
+            <a class="logo" href="{BlogURL}">
+                <p>{Title}</p>
+            </a>
+            <div class="nav">
+                <ul>
+                    <li><a href="{BlogURL}" {block:IndexPage}class="current"{/block:IndexPage}>Projects</a></li>
+                    {block:HasPages} {block:Pages}
+                    <li><a href="{URL}">{Label}</a></li>
+                    {/block:Pages} {/block:HasPages} 
+                    
+                </ul>
+            </div>
+        </div>
+    </header>
+    {block:IndexPage}
+    <section>
+        <div class="hero-wrap">
+            <h1 class="hero-description">{Description}</h1>
+            <a class="hero-link" href="{BlogURL}about">More about me</a>
+        </div>
+    </section>
+    <section>
+        <div class="wrap">
+            <ul id="grid" class="grid">
+                <div class="grid-sizer"></div>
+                <div class="gutter-sizer"></div>
+                {block:Posts}{block:Text}{block:Title}
+                
+                <div class="grid-item">
+                    <h3 class="grid-item_title">{Title}</h3>
+                    {body}
+                </div>
+                {/block:Title}
+                {/block:Text} 
+                
+                {/block:Posts}
+
+            </ul>
+        </div>
+    </section>
+    <script>
+    
+        var $grid = $('.grid').masonry({
+            itemSelector: '.grid-item',
+            columnWidth: '.grid-sizer',
+            gutter: 24,
+            transitionDuration: 0
+        });
+        
+        $grid.imagesLoaded().progress( function() {
+            $grid.masonry('layout');
+        });
+
+    </script>
+    
+    <!-- /portfolio ends -->
+    {/block:IndexPage} 
+    
+    {block:PermalinkPage}
+    
+    {block:Posts inlineMediaWidth="1280"}  
+            {block:Text}
+    <section>
+        <div class="hero-wrap">
+            <h1 class="hero-description">{Title}</h1>
+        </div>
+    </section>
+    <section class="page">
+        <div class="wrap">
+            <div class="text-holder">
+                {Body}
+            </div>
+        </div>
+    </section>
+    
+    <section class="pagination">
+        <div class="wrap">
+            {block:PermalinkPagination} 
+                {block:NextPost}
+                    <a class="prev" href="{NextPost}">← Previous Project</a>
+                {/block:NextPost}
+                 
+                {block:PreviousPost}
+                    <a class="next" href="{PreviousPost}">Next Project →</a>
+                {/block:PreviousPost} 
+            {/block:PermalinkPagination}
+        </div>
+    </section>
+    
+    {/block:Text}
+        {/block:Posts}
+    {/block:PermalinkPage} 
+    
+
+
+    <footer>
+        <div class="wrap">
+            {block:IfShowEmail}<a href="mailto:{text: Email address}" target="_blank">Email</a>
+            {/block:IfShowEmail}
+            {block:IfShowLinkedIn}
+            <a href="{text:LinkedIn link}" target="_blank">Linkedin</a>
+            {/block:IfShowLinkedIn}
+            {block:IfShowDribbble}
+            <a href="{text:Dribbble link}" target="_blank">Dribbble</a>
+            {/block:IfShowDribbble}
+            {block:IfShowBehance}
+            <a href="{text:Behance link}" target="_blank">Behance</a>
+            {/block:IfShowBehance}
+        </div>
+    </footer>
+</body>
+
+</html>
